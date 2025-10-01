@@ -36,6 +36,7 @@ This project uses explicit mapping between different model layers:
 
 ##  Package Structure
 
+```text
 app
 │
 ├── data
@@ -77,7 +78,7 @@ app
 │           └── ProductViewModel.kt
 └── di
     └── AppModule.kt
-
+```
 
 
 ---
@@ -121,27 +122,57 @@ This ensures a fast and reliable user experience even when offline.
 
 ```kotlin
 // DtoToEntityMapper.kt
-fun UserDto.toEntity(): UserEntity {
-    return UserEntity(
-        id = this.id,
-        name = this.fullName
+fun ProductDto.toEntity(): ProductEntity {
+    return ProductEntity(
+        id = id,
+        name = name,
+        price = price?.toFloatOrNull() ?: 0f,
+        image = image,
+        description = description,
+        rating = rating,
+        stock = stoke,
+        type = "default"
+    )
+}
+
+fun ProductXDto.toEntity(): ProductEntity {
+    return ProductEntity(
+        id = id,
+        name = name,
+        price = price?.toFloatOrNull() ?: 0f,
+        image = image,
+        description = description,
+        rating = rating,
+        stock = stock,
+        type = brand
     )
 }
 ```
 
-```// EntityToDomainMapper.kt
-fun UserEntity.toDomain(): User {
-    return User(
-        id = this.id,
-        name = this.name
+```text
+// EntityToDomainMapper.kt
+fun ProductEntity.toDomain(): Product {
+    return Product(
+        id = id,
+        name = name,
+        price = price,
+        image = image,
+        rating = rating,
+        stock = stock
     )
 }
 ```
 
-```// DomainToUiMapper.kt
-fun User.toUiModel(): UserUiModel {
-    return UserUiModel(
-        displayName = this.name.uppercase()
+```text
+// DomainToUiMapper.kt
+fun Product.toUiModel(): ProductUiModel {
+    return ProductUiModel(
+        id = id,
+        displayName = name,
+        price = price,
+        image = image,
+        rating = rating,
+        stock = stock
     )
 }
 ```
